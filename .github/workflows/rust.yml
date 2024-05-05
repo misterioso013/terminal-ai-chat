@@ -1,0 +1,47 @@
+    name: terminal-ai-chat
+
+    on:
+        push:
+            branches: [ "main"]
+        pull_request: 
+            branches: [ "main"]
+
+    jobs:
+        build:
+            runs-on: ubuntu-latest
+
+            steps:
+                - uses: actions/checkout@v2
+                - uses: actions/upload-artifact@v4
+
+                - name: Install Rust
+                  uses: actions-rs/toolchain@v1
+                  with:
+                    toolchain: stable
+
+                - name: Build
+                  run: cargo build --release
+
+                - name: Run
+                  run: cargo run --release
+
+                - name: Upload Artifact
+                  uses: actions/upload-artifact@v4
+                  with:
+                    name: ai
+                    path: target/release/ai
+
+                - name: Download Artifact
+                  uses: actions/download-artifact@v4
+                  with:
+                    name: ai
+                    path: target/release/ai
+                
+                - name: Create Release
+                  uses: elgohr/Github-Release-Action@v5
+                  with:
+                    title: Release ${{ github.sha }}
+                    files: |
+                      target/release/ai
+                    
+
