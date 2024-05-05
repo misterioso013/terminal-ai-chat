@@ -12,7 +12,6 @@
 
             steps:
                 - uses: actions/checkout@v4
-                - uses: actions/upload-artifact@v4
 
                 - name: Install Rust
                   uses: actions-rs/toolchain@v1
@@ -24,18 +23,6 @@
 
                 - name: Run
                   run: cargo run --release
-
-                - name: Upload Artifact
-                  uses: actions/upload-artifact@v4
-                  with:
-                    name: ai
-                    path: target/release/ai
-
-                - name: Download Artifact
-                  uses: actions/download-artifact@v4
-                  with:
-                    name: ai
-                    path: target/release/ai
                 
                 - name: Create Release
                   uses: elgohr/Github-Release-Action@v5
